@@ -15,16 +15,15 @@ public class ZinsrecherController {
     @GetMapping("/")
     public String index(Model model, @Valid InputForm inputForm, BindingResult errors){
         model.addAttribute("inputForm", inputForm);
-        Ergebnis ergebnis =  new Ergebnis(inputForm.getAnfangskapital(),
-                inputForm.getZinssatz(), inputForm.getLaufzeit());
-        List<OutputTable> output = ergebnis.getOutputTables();
-        if(!output.isEmpty()){
-            model.addAttribute("endk", output.stream().mapToDouble(OutputTable::endkapital).max().getAsDouble());
-        }
         if(!errors.hasErrors()){
+            Ergebnis ergebnis =  new Ergebnis(inputForm.getAnfangskapital(),
+                    inputForm.getZinssatz(), inputForm.getLaufzeit());
+            if(!ergebnis.getOutputTables().isEmpty()){
+                List<OutputTable> output = ergebnis.getOutputTables();
+                model.addAttribute("endk", output.stream().mapToDouble(OutputTable::endkapital).max().getAsDouble());
+            }
             model.addAttribute("ergebnisse", ergebnis);
         }
-
         return "index";
     }
 }
