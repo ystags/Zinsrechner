@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <link rel="stylesheet" href="../static/css/bootstrap.min.css"
+                         th:href="@{css/bootstrap.min.css}" >
+    <title>Zinsen Rechner</title>
+</head>
+<body>
+<main class="container-fluid">
+  <h1>Zinsrechner</h1>
+  <div class="pl-3">
+    <section class="form-group border">
+      <div class="p-2">
+        <form action="/" th:object="${inputForm}">
+          <div class="pb-2">
+            <label for="AnfangskapitalID" class="form-control border-0">Anfangskapital</label>
+            <input type="text" id="AnfangskapitalID" name="anfangskapital" value=" " th:value="*{anfangskapital}" class="form-control" required>
+            <small class="text-danger" th:if="*{#fields.hasErrors('anfangskapital')}" th:errors="*{anfangskapital}">Falsche Eingabe!</small>
+          </div>
+          <div class="pb-2">
+            <label for="LaufzeitID" class="form-control border-0">Laufzeit</label>
+            <input type="text" id="LaufzeitID" name="laufzeit" value=" " th:value="*{laufzeit}" class="form-control" required>
+            <small class="text-danger" th:if="*{#fields.hasErrors('laufzeit')}" th:errors="*{laufzeit}">Falsche Eingabe!</small>
+          </div>
+          <div class="pb-2">
+            <label for="ZinssatzID" class="form-control border-0">Zinssatz (% p.a.)</label>
+            <input type="text" id="ZinssatzID" name="zinssatz" value=" " th:value="*{zinssatz}" class="form-control" required>
+            <small class="text-danger" th:if="*{#fields.hasErrors('zinssatz')}" th:errors="*{zinssatz}">Falsche Eingabe!</small>
+          </div>
+          <div class="p-4 form-group">
+            <input type="checkbox" name = "showTable" id="box" class="form-check-input" value="true">
+            <label for="box">Tabelle anzeigen</label>
+          </div>
+          <div class="pt-2">
+            <button type="submit" class="btn btn-success" >Submit</button>
+          </div>
+        </form>
+      </div>
+    </section>
+    <section class="form-group border">
+      <div class="p-2">
+        <div>
+          <h5>Ergbnis</h5>
+        </div>
+        <div>
+          <p>Bei einer Laufzeit von <span th:text="${inputForm.laufzeit}">3</span> Jahren bei einem konstanten Zinssatz von
+            <span th:text="${inputForm.zinssatz}">0.5</span> % p.a. und einem Anfangskapital von
+            <span th:text="${inputForm.anfangskapital}">5000.00</span> Euro, beträgt das Endkapital
+             <span th:text="${endk}" >5075.38</span> Euro</p>
+        </div>
+        <div class="table" th:if="${inputForm.isShowTable()}">
+          <table th:object="${ergebnisse}">
+            <thead>
+            <tr>
+              <th>Jahr</th>
+              <th>Anfangskapital</th>
+              <th>Zinsen</th>
+              <th>Endkapital</th>
+            </tr>
+            </thead>
+            <tbody th:remove="all-but-first">
+            <tr th:each="ergebnis : ${ergebnisse.getOutputTables()}">
+              <td th:text="${ergebnis.jahr()}">1</td>
+              <td th:text="${ergebnis.anfangskapital()}">5000.00</td>
+              <td th:text="${ergebnis.zinsen()}">25.00</td>
+              <td th:text="${ergebnis.endkapital()}">5025.00</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+</body>
+</html>
